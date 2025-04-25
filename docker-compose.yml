@@ -1,0 +1,64 @@
+version: '3.8'
+services:
+  flask-service:
+    container_name: flask-app
+    build: .
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - grpc-service
+    networks:
+      - pharma-network
+    command: >
+      bash -c "
+        # Wait for PostgreSQL to be ready
+        while ! pg_isready -h postgres -p 5432 -U pharma_user; do
+          echo 'Waiting for PostgreSQL...'
+          sleep 2
+        done
+        # Generate gRPC code
+        python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. public_health.proto
+        # Initialize database
+        python db_init.py
+        # Start Flask application
+        flask run --host=0.0.0.0
+      "
+
+  grpc-service:
+    container_name: grpc-service
+    build: 
+      context: .
+      dockerfile: Dockerfile.grpc
+    ports:
+      - "50051:50051"
+    networks:
+      - pharma-network
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: pharma_db
+      POSTGRES_USER: pharma_user
+      POSTGRES_PASSWORD: strongpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - pharma-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pharma_user -d pharma_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  pharma-network:
+    driver: bridge
+
+volumes:
+  pgdata:

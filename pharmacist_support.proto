@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package pharmacist_support;
+
+service PharmacistSupport {
+  rpc FetchDrugInteractions (DrugPair) returns (DrugInteractionResponse);
+  rpc FetchAlternativeDrugs (DrugName) returns (AlternativeDrugsResponse);
+}
+
+message DrugPair {
+  string drugA = 1;
+  string drugB = 2;
+}
+
+message DrugInteractionResponse {
+  string interaction_type = 1;
+  string severity = 2;
+}
+
+message DrugName {
+  string name = 1;
+}
+
+message AlternativeDrug {
+  string name = 1;
+  float efficacy_score = 2;
+}
+
+message AlternativeDrugsResponse {
+  repeated AlternativeDrug alternatives = 1;
+}
+

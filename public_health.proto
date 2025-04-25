@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package public_health;
+
+service PublicHealth {
+  rpc FetchAdverseEvents (Empty) returns (AdverseEventsResponse);
+  rpc FetchVaccineReactions (Empty) returns (VaccineReactionsResponse);
+  rpc FetchPrescriptionStats (Empty) returns (PrescriptionStatsResponse);
+}
+
+message Empty {}
+
+message AdverseEvent {
+  string substance_name = 1;
+  string reaction = 2;
+}
+
+message AdverseEventsResponse {
+  repeated AdverseEvent events = 1;
+}
+
+message VaccineReaction {
+  string vaccine_name = 1;
+  string symptoms = 2;
+}
+
+message VaccineReactionsResponse {
+  repeated VaccineReaction reactions = 1;
+}
+
+message PrescriptionStats {
+  string drug_name = 1;
+  int32 total_prescribed = 2;
+}
+
+message PrescriptionStatsResponse {
+  repeated PrescriptionStats stats = 1;
+}
+

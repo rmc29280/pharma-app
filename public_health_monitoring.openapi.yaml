@@ -1,0 +1,69 @@
+openapi: 3.0.0
+info:
+  title: "Public Health Monitoring API"
+  description: "API for tracking drug-related public health trends and safety monitoring"
+  version: "1.0.0"
+servers:
+  - url: "/api/public-health"
+
+tags:
+  - name: "Adverse Events"
+    description: "Endpoints related to tracking adverse drug reactions."
+  - name: "Vaccine Monitoring"
+    description: "Endpoints for monitoring vaccine safety."
+  - name: "Prescription Trends"
+    description: "Endpoints for analyzing prescription patterns."
+  - name: "Regulatory Reports"
+    description: "Endpoints for compliance reporting."
+
+paths:
+  /adverse-events:
+    get:
+      summary: "Retrieve reported adverse drug reactions"
+      description: "Fetch a list of reported adverse drug events."
+      responses:
+        "200":
+          description: "List of adverse drug events"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DrugAdverseEvent"
+
+  /vaccines/reactions:
+    get:
+      summary: "Retrieve vaccine-related adverse reaction data"
+      description: "Fetch reported vaccine reactions."
+      responses:
+        "200":
+          description: "List of vaccine reactions"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vaccine"
+
+  /prescriptions/stats:
+    get:
+      summary: "Analyze trends in drug prescriptions"
+      description: "Provides statistics and reports on prescription trends by region."
+      responses:
+        "200":
+          description: "Prescription trend statistics"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Prescriptions"
+
+components:
+  schemas:
+    DrugAdverseEvent:
+      $ref: "#/components/schemas/DrugAdverseEvent"
+    Vaccine:
+      $ref: "#/components/schemas/Vaccine"
+    Prescriptions:
+      $ref: "#/components/schemas/Prescriptions"

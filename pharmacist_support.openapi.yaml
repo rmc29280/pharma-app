@@ -1,0 +1,69 @@
+openapi: 3.0.0
+info:
+  title: "Pharmacist Support API"
+  description: "API for assisting pharmacists with drug safety and recommendations"
+  version: "1.0.0"
+servers:
+  - url: "/api/pharmacist-support"
+
+tags:
+  - name: "Drug Interactions"
+    description: "Endpoints related to identifying drug interactions."
+  - name: "Alternative Drugs"
+    description: "Endpoints for recommending safer alternative drugs."
+  - name: "Drug Labeling"
+    description: "Endpoints providing drug label information."
+  - name: "Pharmacist Notifications"
+    description: "Endpoints for pharmacist subscription notifications."
+
+paths:
+  /drugs/interactions:
+    get:
+      summary: "Analyze potential contraindications"
+      description: "Retrieve drug interaction details."
+      responses:
+        "200":
+          description: "Drug interaction analysis"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DrugInteraction"
+
+  /drugs/alternatives:
+    get:
+      summary: "Suggest safer alternatives"
+      description: "Fetch recommended alternative drugs."
+      responses:
+        "200":
+          description: "List of alternative drugs"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AlternativeDrug"
+
+  /drugs/labeling:
+    get:
+      summary: "Retrieve detailed drug label information"
+      description: "Access label details for drugs."
+      responses:
+        "200":
+          description: "Drug labeling details"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DrugLabelData"
+
+components:
+  schemas:
+    DrugInteraction:
+      $ref: "#/components/schemas/DrugInteraction"
+    AlternativeDrug:
+      $ref: "#/components/schemas/AlternativeDrug"
+    DrugLabelData:
+      $ref: "#/components/schemas/DrugLabelData"
